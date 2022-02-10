@@ -2,22 +2,37 @@ require('dotenv').config();
 const express = require('express');
 const server = express();
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 8080;
 
-server.listen(PORT, ()=>{
-    console.log(`***Listening on port ${PORT}***`);
-    console.log(process.env.MESSAGE);
+server.use(express.json());
 
+
+
+server.get('/api/users', (req, res) => {
+    res.json({
+        users: 
+        [
+            'John' , 
+            'Harley', 
+            'Jeff'
+        ]
+    })
 })
 
-server.get('/api/users', (req, res)=>{
-    res.json([
-        {id: 1, username: 'John'},
-        {id: 1, username: 'Harley'},
-        {id: 1, username: 'Jeff'},
-    ])
+server.post('/api/register', (req, res) => {
+    username: req.body.username
+    password: req.body.password
 })
 
-server.use('*', (req, res)=>{
-    res.send('<h1>Hola, Heroku</h1>');
+server.post('/api/login', (req, res) => {
+    const { username, password } = req.body;
+    if (username && password){
+        res.json({
+            message: `HAL 9000: Good morning, ${username}`
+        })
+    }
+})
+
+server.listen(PORT, () => {
+    console.log(`*** listening on port ${PORT} ***`);
 })
